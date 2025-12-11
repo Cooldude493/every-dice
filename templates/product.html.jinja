@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  
+  <body class = "bg-blue-900 text-white min-h-screen">
+  
+  {% include "components/navbar.html.jinja"%}
+    
+    <main class="bg-gray-200 max-w-13/16 max-h-full mx-auto p-6 mb-5 text-black">
+
+        <div class="max-w-4xl p-6 mb-5 text-black rounded-lg mt-3 flex flex-box justify-normal ">
+            <div class= "mr-40 text-center"> 
+            <img class="h-85 mx-auto rounded-lg mt-3" src="{{ product ['Image'] }} "> 
+            </div>
+         
+         <h1 class="text-4xl text-center mt-10">
+        {{ product ["Name"] }}
+        </h1>
+        
+        </div>
+            
+        <div class="pl-3 font-bold text-sm">
+        {{ product ["Description"]}} 
+        </div>
+            
+            <div class="text-right font-bold text-sm pb-3 pr-3"> ${{ product ["Price"]}} </div>
+    
+    </main>
+  </body>
+</html>

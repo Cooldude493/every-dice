@@ -15,7 +15,7 @@
   
   {% for x in products %}
 
-  <div class="grid bg-gray-200 rounded-lg mt-3"> 
+  <a href="/product/{{ x ['ID']}}" class="grid bg-gray-200 rounded-lg mt-3"> 
   
     <img class="h-35 mx-auto rounded-lg mt-3" src="{{ x ['Image'] }} "> <br>
 
@@ -24,7 +24,7 @@
     <div class="text-right font-bold text-sm pb-3 pr-3"> ${{ x ["Price"]}} </div>
 
 
-  </div>
+  </a>
   {% endfor %}
 </main>
 
