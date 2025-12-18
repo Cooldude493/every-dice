@@ -8,6 +8,12 @@
   <body class = "bg-blue-900 text-white min-h-screen">
   {% include "components/navbar.html.jinja"%}
 
+      {% for message in get_flashed_messages()%}
+        <ol class="bg-red-500 text-white font-bold rounded-t px-4 py-2 mt-4 mx-10">
+         {{ message }}
+        </ol>
+    {% endfor%}
+
     <h1 class="text-4xl text-center mt-10">
       Welcome to Every Dice - Your One-Stop Shop for All Things Dice!
     </h1>

@@ -1,6 +1,6 @@
-from flask import Flask, render_template,  request, flash, redirect
+from flask import Flask, render_template,  request, flash, redirect, abort
 
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, logout_user, login_required
 
 import pymysql
 
@@ -13,6 +13,8 @@ config = Dynaconf(settings_file=["setting.toml"])
 app.secret_key = config.secret_key
 
 login_manager = LoginManager( app )
+
+login_manager.login_view = "/login"
 
 class User:
     is_authenticated = True
@@ -87,10 +89,14 @@ def product_page(product_id):
     
     connection.close()
 
+    if result is None:
+        abort(404)
+
     return render_template("product.html.jinja", product=result)
 
 @app.route("/register", methods=["POST" , "GET"])
-def signup():
+
+def register():
     if request.method == "POST":
         name=request.form["name"]
         
@@ -151,9 +157,15 @@ def login():
             login_user( User(result) )
             return redirect("/browse")
 
-
-       
-
-
-
     return render_template("login.html.jinja")
+
+
+
+@app.route("/logout", methods=["GET", "POST"])
+@login_required
+def logout():
+    logout_user()
+
+    flash("You have been logged out.")
+    
+    return redirect("/")

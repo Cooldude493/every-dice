@@ -9,9 +9,9 @@
   {% include "components/navbar.html.jinja"%}
 
     {% for message in get_flashed_messages()%}
-        <li class="bg-red-500 text-white font-bold rounded-t px-4 py-2 mt-4 mx-10">
+        <ol class="bg-red-500 text-white font-bold rounded-t px-4 py-2 mt-4 mx-10">
          {{ message }}
-        </li>
+        </ol>
     {% endfor%}
 
     <h1 class="text-4xl text-center mt-10">
@@ -37,6 +37,7 @@
 
       </div>
 							<button type="submit" class="w-full mt-6 mb-3 bg-indigo-100 rounded-lg px-4 py-2 text-lg text-gray-800 tracking-wide font-semibold font-sans">Login</button>
+                            <a href="/register" class="w-full mt-6 bg-indigo-600 rounded-lg px-52.5 py-2.5 text-lg text-white tracking-wide font-semibold font-sans">Register</a>
 
 		</form>
 
