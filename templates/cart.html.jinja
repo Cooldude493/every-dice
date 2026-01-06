@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class = "bg-blue-900 text-white min-h-screen">
+  {% include "components/navbar.html.jinja"%}
+
+      {% for message in get_flashed_messages()%}
+        <ol class="bg-red-500 text-white font-bold rounded-t px-4 py-2 mt-4 mx-10">
+         {{ message }}
+        </ol>
+    {% endfor%}
+      
+      <main>
+          <h1 class="text-4xl text-center mt-10">
+              Your Shopping Cart
+          </h1>
+      </main>
+
+
+  <main class="justify-items-start text-black max-wr-40 max-h-full mx-auto p-6 mb-5">
+  
+  {% for x in cart %}
+
+  <a class="grid bg-gray-200 rounded-lg mt-3 font-bold"> 
+  
+    <img class="h-38 w-38 rounded border" src="{{ x ['Image'] }} ">
+
+    <div class="grid grid-cols-4 gap-4 p-3 justify-items-center">
+
+      <div class="">{{ x ["Name"]}} </div>
+
+      <div class=""> ${{ x ["Price"]}} </div>
+
+      <div class="">${{ x ["Price"] * x["Quantity"]}} </div>
+
+      <div class="flex space-x-4 justify-center mb-3"> 
+    
+    </div>  
+    
+    <form method="post" action="/cart/{{x['ProductID']}}/update_qty">
+      <input name="qty" type="number" value= "{{ x ['Quantity']}}" min="1" max="10">
+      <button type="submit">Update</button>
+    </form>
+
+    <form method="post" action="/cart/{{x['ProductID']}}/delete">
+      <button type="submit">Delete</button>
+    </form>
+    
+    </div>
+
+    
+
+
+  </a>
+  {% endfor %}
+
+  </main>
+
+
+  </body>
+</html>
