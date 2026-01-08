@@ -239,3 +239,48 @@ def logout():
     
     return redirect("/")
 
+
+@app.route("/checkout", methods=["GET", "POST"])
+@login_required
+def checkout():
+    
+    connection = connect_db()
+
+    cursor = connection.cursor()
+
+    cursor.execute(" SELECT * FROM `Cart` JOIN `Product` ON `Product`.`ID` = `Cart`.`ProductID` WHERE `UserID` = %s", (current_user.id,) )
+
+    result = cursor.fetchall()
+    
+    if request.method == "POST":
+        #create the sale in database
+
+        cursor.execute(""" INSERT INTO `UserOrder` (`UserID`) VALUES (%s) """, (current_user.id,) )
+        
+        #store products bought
+        sale = cursor.lastrowid
+        for item in result:
+            cursor.execute(""" INSERT INTO `OrderCart` (`OrderID`, `ProductID`, `Quantity`) 
+                           VALUES (%s, %s, %s)""", (sale, item['ProductID'], item['Quantity']) )
+
+        #empty cart
+
+        cursor.execute(" DELETE FROM `Cart` WHERE `UserID` = %s", (current_user.id,) )
+
+        return redirect('/thank_you')
+    
+    
+    connection.close()
+    
+    if len(result) == 0:
+        return redirect("/cart")
+    
+    return render_template("checkout.html.jinja", cart=result)
+    
+
+@app.route("/thank_you")
+@login_required
+
+def thank_you():
+    return render_template("thank_you.html.jinja")
+    
