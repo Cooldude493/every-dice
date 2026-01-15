@@ -63,7 +63,7 @@ def connect_db():
 def index():
     return render_template("homepage.html.jinja")
 
-@app.route("/browse")
+@app.route("/browse", methods=["POST", "GET"])
 def browse():
     connection = connect_db()
 
@@ -89,10 +89,32 @@ def product_page(product_id):
     
     connection.close()
 
+    connection = connect_db()
+
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM `Review` JOIN `User` ON `Review`.`UserID` = `User`.`ID`  WHERE `ProductID` = %s ", (product_id,) )
+
+    reviews = cursor.fetchall()
+
+    connection.close()
+
+    total = 0
+    numbers = len(reviews)
+    for total_sum in reviews:
+        total = total + total_sum['Ratings']
+    
+    try:
+        average = total / numbers
+    except ZeroDivisionError:
+        average = 0
+
+
+
     if result is None:
         abort(404)
 
-    return render_template("product.html.jinja", product=result)
+    return render_template("product.html.jinja", product=result, reviews=reviews, average=average)
 
 @app.route("/product/<product_id>/add_to_cart", methods=['POST'])
 @login_required
@@ -109,6 +131,26 @@ def add_to_cart(product_id):
 
     return redirect("/cart")
 
+
+@app.route("/product/<product_id>/add_review", methods=['POST'])
+@login_required
+def add_review(product_id):
+
+    rating = request.form['rating']
+    comment = request.form['comments']
+    
+    connection = connect_db()
+    cursor = connection.cursor()
+    cursor.execute("""
+        INSERT INTO `Review` (`Ratings`, `Comments`, `UserID`, `ProductID`)
+        VALUES ( %s, %s, %s, %s )
+        """, (rating, comment, current_user.id, product_id) )
+    
+    connection.close()
+
+
+    return redirect(f"/product/{product_id}")
+
 @app.route("/cart")
 @login_required
 def cart():
@@ -117,7 +159,9 @@ def cart():
 
     cursor = connection.cursor()
 
-    cursor.execute(" SELECT * FROM `Cart` JOIN `Product` ON `Product`.`ID` = `Cart`.`ProductID` WHERE `UserID` = %s", (current_user.id,) )
+    cursor.execute(""" SELECT * FROM `Cart` 
+                   JOIN `Product` ON `Product`.`ID` = `Cart`.`ProductID` 
+                   WHERE `UserID` = %s""",(current_user.id,) )
 
     result = cursor.fetchall()
 
