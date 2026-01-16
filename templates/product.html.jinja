@@ -10,7 +10,7 @@
   
   {% include "components/navbar.html.jinja"%}
     
-    <main class="bg-gray-200 max-w-13/16 max-h-full mx-auto p-6 mb-5 text-black">
+    <main class="bg-gray-200 max-w-13/16 max-h-full mx-auto p-6 mb-5 text-black rounded-lg mt-10"> 
 
         <div class="max-w-4xl p-6 mb-5 text-black rounded-lg mt-3 flex flex-box justify-normal ">
             <div class= "mr-40 text-center"> 
@@ -45,44 +45,50 @@
     </main>
 
 
-  {% for x in reviews%}
-
-<div class = "grid bg-gray-200 rounded-lg mt-3 font-bold text-black max-w-3xl mb-5">
+<div class="bg-gray-100 text-black font-semibold m-16 rounded-lg p-6">
+<div class="container mx-auto py-8">
+  <div class="flex flex-wrap lg:flex-nowrap gap-8">
   
-  <div class = "grid grid-cols-4 gap-4 p-3 justify-items-center">
-    <div>{{ x ["Name"]}}</div>
+    
+    <div class="w-full lg:w-1/2 bg-gray-100 p-6 rounded-lg shadow-md">
+    
+    <h2 class="text-2xl font-bold mb-4">Customer Reviews</h2>
+      {% for x in reviews %}
+        
+        <div>{{ x ["Name"]}}</div>
+        
+        <div>Rating:{{ x ["Ratings"]}}</div>
+        
+        <div>{{ x ["Timestamp"].strftime('%-m-%-d-%Y')}}</div>
+        
+        <div>{{ x ["Comments"]}}</div> <br> <br>
 
-    <div>{{ x ["Ratings"]}}</div>
 
-    <div>{{ x ["Timestamp"].strftime('%-m-%-d-%Y')}}</div>
-
-    <div>{{ x ["Comments"]}}</div>
-
-  </div>
-  
-  {%endfor%}
-</div>
-
-<form class="" method="post" action="/product/{{product['ID']}}/add_review">
-<br>
-
-<label>Rating</label>
-  <input type="number" name="rating" value="1" min="1" max="5"> <br> <br>
-
-<label>Comment</label> <br>
-  <textarea name="comments"></textarea> 
-
-<button type="submit" class="w-full mt-6 mb-3 bg-indigo-800 rounded-lg px-4 py-2 text-lg text-gray-800 tracking-wide font-semibold font-sans text-white"> 
-  Submit Review
-  </button>
+      {% endfor %}
+    </div>
 
 
 
 
+    
+    <div class="w-full lg:w-1/2 bg-grey-100 p-6 rounded-lg shadow-md">
+      <form method="post" action="/product/{{product['ID']}}/add_review">
+        <div class="mb-4">
 
-
-
-  </form>
+        <h2 class="text-2xl font-bold mb-4">Add a Review</h2>
+          <label class="block text-gray-700 font-medium">Rating</label>
+          <input type="number" name="rating" value="1" min="1" max="5 class="w-full mt-1 p-2 border-gray-300 rounded-lg">
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 font-medium">Comment</label>
+          <textarea name="comments"
+ class="w-full mt-1 p-2 border border-gray-300 rounded-lg"></textarea>
+        </div>
+        <button type="submit" class="w-full mt-6 bg-indigo-800 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold">
+          Submit Review
+        </button>
+      </form>
+    </div>
 
 
 </body>

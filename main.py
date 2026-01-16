@@ -356,4 +356,9 @@ def orders():
 
 def thank_you():
     return render_template("thank_you.html.jinja")
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html.jinja"), 404
     
